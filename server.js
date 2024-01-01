@@ -14,7 +14,15 @@ import {fileURLToPath} from 'url';
 dotenv.config();
 
 //database config
-connectDB();
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URL);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
 
 //es module fix
 const __filename = fileURLToPath(import.meta.url);
@@ -41,7 +49,9 @@ app.use("*", function (req, res) {
 //port
 const PORT = process.env.PORT || 8080;
 
-//run listen
-app.listen(PORT, () => {
-  console.log(`Server Running on ${PORT}`.bgCyan.white);
-});
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
+})
+
