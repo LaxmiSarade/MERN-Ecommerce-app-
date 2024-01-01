@@ -26,7 +26,7 @@ const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.static(path.join(new URL('.', import.meta.url).pathname, './client/build')));
+app.use(express.static(path.join(__dirname, "./client/build")));
 
 //rotes
 app.use("/api/v1/auth", authRoutes);
